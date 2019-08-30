@@ -27,25 +27,63 @@
         <div class=\"wtTimeFrameTop\"> \
           <div>Time.is</div> \
           <div>" + cityName + "</div> \
-          <div onclick=\"var d=document.getElementById('" + frameId + "');clearInterval(parseInt(d.getAttribute('data-timer')));d.remove();\">close</div> \
+          <div class=\"wtClose\">close</div> \
         </div> \
         <div class=\"wtTimeFrameContent\">&nbsp;</div> \
-        <div class=\"wtTimeFrameBottom\"></div> \
+        <div class=\"wtTimeFrameBottom\">&nbsp;</div> \
       ";
       frame.innerHTML = htmlString;
 
       const weeks = ['日', '一', '二', '三', '四', '五', '六'];
       wtGetTime(city).then(data => {
         document.getElementById(frameId).getElementsByClassName('wtTimeFrameBottom')[0].innerHTML = showDateStr(data.wtTime, weeks[data.day_of_week], data.week_number);
-        let timerId = setInterval(() => {
-          data.wtTime = new Date(data.wtTime.getTime() + 1000)
-          document.getElementById(frameId).getElementsByClassName('wtTimeFrameContent')[0].innerHTML = showTimeStr(data.wtTime);
-        }, 1000);
-        frame.setAttribute('data-timer', timerId);
+        setTick(city, data.wtTime, frameId, true);
+      }).catch(err => {
+        document.getElementById(frameId).getElementsByClassName('wtTimeFrameContent')[0].innerHTML = '<div style="font-size: 20px">' + err + '</div>';
+      })
 
-      }).catch(err => {})
+      frame.getElementsByClassName('wtClose')[0].onclick = function() {
+        setTick(city, null, null, false);
+        frame.remove();
+      }
     }
   }
+
+  const isBlank = function(variable) {
+    return variable === null || typeof variable === 'undefined';
+  }
+
+  const setTick = (function() {
+    let subscribers = {};
+    let timerId;
+
+    return function(city, wtTime, frameId, insert) {
+      if (!insert) { // 删除城市
+        delete subscribers[city];
+        if (Object.keys(subscribers).length === 0 && !isBlank(timerId)) {
+          clearInterval(timerId);
+          timerId = null;
+        }
+        return;
+      }
+      if (!isBlank(subscribers[city])) return;
+      // 校准秒数
+      if (Object.keys(subscribers).length > 0) {
+        let reference = subscribers[Object.keys(subscribers)[0]];
+        wtTime.setSeconds(reference.wtTime.getSeconds())
+      }
+      subscribers[city] = { wtTime, frameId };
+
+      if (isBlank(timerId)) {
+        timerId = setInterval(() => {
+          Object.keys(subscribers).forEach(k => {
+            subscribers[k].wtTime = new Date(subscribers[k].wtTime.getTime() + 1000);
+            document.getElementById(subscribers[k].frameId).getElementsByClassName('wtTimeFrameContent')[0].innerHTML = showTimeStr(subscribers[k].wtTime);
+          })
+        }, 1000);
+      }
+    } // return
+  })();
 
   const showTimeStr = function(time) {
     const showTimeItem = num => (num + 100).toString().substr(1)
