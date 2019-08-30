@@ -21,10 +21,6 @@
     "48": "images/clock.png",
     "128": "images/clock.png"
   },
-  "homepage_url": "https://www.baidu.com",
-  "chrome_url_overrides": {
-    "newtab": "newtab.html"
-  },
   "browser_action": {
     "default_icon": "images/clock.png",
     "default_popup": "popup.html"
