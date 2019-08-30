@@ -7,22 +7,22 @@
       if (id) { elem.setAttribute('id', id); }
       if (klass) { elem.setAttribute('class', klass); }
       parent.appendChild(elem);
-      elem.newElem = 1
+      return [elem, true];
     }
-    return elem;
+    return [elem, false];
   }
 
   const addTimeBox = function() {
-    return addElem(document.body, 'wtTimeBox', 'wtTimeBox');
+    return addElem(document.body, 'wtTimeBox', 'wtTimeBox')[0];
   }
 
   const addCityTime = function(city, cityName) {
     const box = addTimeBox();
     let frameId = 'wtTimeFrame-' + city.toString();
 
-    let frame = addElem(box, frameId, 'wtTimeFrame');
+    let [frame, newFrame] = addElem(box, frameId, 'wtTimeFrame');
 
-    if (frame.newElem) {
+    if (newFrame) {
       let htmlString = "\
         <div class=\"wtTimeFrameTop\"> \
           <div>Time.is</div> \
