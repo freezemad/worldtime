@@ -8,4 +8,15 @@
       chrome.tabs.sendMessage(tabs[0].id, elem.getAttribute('data-city') + ":" + elem.innerHTML)
     })
   }
+
+  chrome.storage.sync.get(['regionSelected'], function(result) {
+    let _regionSel = result.regionSelected || {};
+
+    let ary = [];
+    Object.keys(_regionSel).forEach(k => {
+      ary.push("<li><a data-city='" + k + "'>" + _regionSel[k] + "</a></li>");
+    })
+
+    document.getElementById('cities').innerHTML = ary.join('');
+  });
 })();

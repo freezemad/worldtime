@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>World Time Options</title>
+    <style>
+      button {
+        height: 30px;
+        width: 100px;
+        outline: none;
+      }
+
+      a {
+        text-decoration: none;
+      }
+
+      input {
+        height: 25px;
+      }
+
+      .formBox {
+        width: 500px;
+      }
+
+      .formBox > div {
+        display: flex;
+        align-items: center;
+
+        width: 100%;
+        height: 50px;
+      }
+
+      .formBox > div > div {
+        width: 100px;
+      }
+
+      .regionList {
+        width: 500px;
+      }
+
+      .regionList > div {
+        width: 100%;
+        height: 25px;
+      }
+    </style>
+    <script src="options.js"></script>
+  </head>
+  <body>
+    <div class="formBox">
+      <div>
+        <div>地区标识</div><input id='region' type='text' name="region" /><span style='margin-left:10px;color:gray'>例如: America/Vancouver, <a href="http://worldtimeapi.org/api/timezone.txt" target="_blank">地区列表</a> </span>
+      </div>
+      <div>
+        <div>地区名</div><input id='cityname' type='text' name="cityname" />
+      </div>
+      <div>
+        <div></div>
+        <button id="add">添加</button>
+      </div>
+    </div>
+    <div id="regionList" class="regionList">
+    </div>
+  </body>
+</html>
