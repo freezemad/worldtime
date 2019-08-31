@@ -42,10 +42,10 @@
         document.getElementById(frameId).getElementsByClassName('wtTimeFrameContent')[0].innerHTML = '<div style="font-size: 20px">' + err + '</div>';
       })
 
-      frame.getElementsByClassName('wtClose')[0].onclick = function() {
+      wtAddEventHandler(frame.getElementsByClassName('wtClose')[0], 'click', function(){
         setTick(city, null, null, false);
         frame.remove();
-      }
+      });
     }
   }
 
